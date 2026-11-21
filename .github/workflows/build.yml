@@ -26,6 +26,7 @@ jobs:
       - name: Build project
         shell: bash
         run: |
+          cd "Plinos-Visuals-Project"
           if [ -f "./gradlew" ]; then
             chmod +x ./gradlew
             ./gradlew build
