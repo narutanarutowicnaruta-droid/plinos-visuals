@@ -1,6 +1,6 @@
 name: Build PLINOS VISUALS
 
-'on':
+on:
   workflow_dispatch:
   push:
     branches:
@@ -23,26 +23,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Find and build project
+      - name: Build project
         shell: bash
         run: |
-          echo "Searching for Gradle project..."
-
-          SETTINGS=$(find . -type f \( -name settings.gradle -o -name settings.gradle.kts \) | head -n 1)
-
-          if [ -z "$SETTINGS" ]; then
-            echo "ERROR: settings.gradle not found!"
-            find . -maxdepth 4 -type f
-            exit 1
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew build
+          else
+            gradle build
           fi
-
-          PROJECT_DIR=$(dirname "$SETTINGS")
-
-          echo "Project found: $PROJECT_DIR"
-
-          cd "$PROJECT_DIR"
-
-          gradle build
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
